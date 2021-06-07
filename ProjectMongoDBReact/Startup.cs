@@ -18,6 +18,7 @@ using ProjectMongoDBReact.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq;
+using ProjectMongoDBReact.Services;
 
 namespace ProjectMongoDBReact
 {
@@ -42,6 +43,9 @@ namespace ProjectMongoDBReact
 
 
             services.AddSingleton<PokojService>();
+            services.AddSingleton<RezerwacjaService>();
+            services.AddSingleton<KlientService>();
+            services.AddSingleton<PracownikService>();
 
             ////////////////////
 

@@ -56,7 +56,7 @@ export class pokojDetails extends Component {
 
                         {showM === true ?
                             <td><input type="text" id={id + '_nazwa'} defaultValue={nazwa} style={{ background_color: "inherit", border: "0" }} /></td>
-                            : <td><a href={'/pokojDetails/' + id}>{nazwa}</a></td>}
+                            : <td>{nazwa}</td>}
 
                         {showM === true ?
                             <td><input type="text" id={id + '_ile_osob'} defaultValue={ile_osob} style={{ background_color: "inherit", border: "0" }} /></td>
@@ -70,7 +70,7 @@ export class pokojDetails extends Component {
                         <td style={showM === false ? { display: 'none' } : {}}><Button variant="outline-danger" size="sm" value={id} onClick={deletePokoj}>Usun</Button></td>
 
 
-                        <td style={showM === true ? { display: 'none' } : {}}><Button variant="outline-success" href={'/book/create?id=' + id}>Zarezerwuj</Button></td>
+                        <td style={showM === true ? { display: 'none' } : {}}><Button variant="outline-success" href={'/addRezerwacja/' + id}>Zarezerwuj</Button></td>
 
                         </tr>
                 </tbody>

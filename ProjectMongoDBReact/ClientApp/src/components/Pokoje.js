@@ -43,7 +43,6 @@ export class Pokoje extends Component {
                       <th>Nazwa</th>
                       <th>Ile osob</th>
                       <th>Cena</th>
-                      <th style={showM === false ? { display: 'none' } : {}}>Edytuj</th>
                       <th style={showM === false ? { display: 'none' } : {}}>Usun</th>
                       <th style={showM === true ? { display: 'none' } : {}}>Rezerwacja</th>
                   </tr>
@@ -52,27 +51,17 @@ export class Pokoje extends Component {
                   {pokojeList.map(pokoj =>
                       <tr key={pokoj.id}>
 
-                          {showM === true ?
-                          <td> <input type="text" id={pokoj.id + '_nr_pokoju'} defaultValue={pokoj.nr_pokoju} onChange={this.onInputchange} style={{ background_color: "inherit", border: "0" }} /> </td>
-                              : <td>{pokoj.nr_pokoju}</td>}
+                          <td>{pokoj.nr_pokoju}</td>
 
-                          {showM === true ?
-                              <td><input type="text" id={pokoj.id + '_nazwa'} defaultValue={pokoj.nazwa} style={{ background_color: "inherit", border: "0" }} /></td>
-                              : <td><a href={'/pokojDetails/' + pokoj.id}>{pokoj.nazwa}</a></td>}
+                          <td><a href={'/pokojDetails/' + pokoj.id}>{pokoj.nazwa}</a></td>
 
-                          {showM === true ?
-                              <td><input type="text" id={pokoj.id + '_ile_osob'} defaultValue={pokoj.ile_osob} style={{ background_color: "inherit", border: "0" }} /></td>
-                              : <td>{pokoj.ile_osob}</td>}
+                          <td>{pokoj.ile_osob}</td>
 
-                          {showM === true ?
-                          <td><input type="text" id={pokoj.id + '_cena'} defaultValue={pokoj.cena} style={{ background_color: "inherit", border: "0" }} /></td>
-                              : <td>{pokoj.cena}</td>}
+                          <td>{pokoj.cena}</td>
                               
-                          <td style={showM === false ? { display: 'none' } : {} }><Button variant="outline-warning" size="sm" value={pokoj.id} onClick={editPokoj}>Edytuj</Button></td>
                           <td style={showM === false ? { display: 'none' } : {} }><Button variant="outline-danger" size="sm" value={pokoj.id} onClick={deletePokoj}>Usun</Button></td>
 
-                         
-                          <td style={showM === true ? { display: 'none' } : {}}><Button variant="outline-success" href={'/book/create?id=' + pokoj.id}>Zarezerwuj</Button></td>
+                          <td style={showM === true ? { display: 'none' } : {}}><Button variant="outline-success" href={'/addRezerwacja/' + pokoj.id}>Zarezerwuj</Button></td>
                           
               </tr>
                   )} 
