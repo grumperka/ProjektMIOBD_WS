@@ -82,7 +82,7 @@ export class pokojDetails extends Component {
 
     render() {
         let contents = this.state.loading
-            ? <p><em>Loading...</em></p>
+            ? <p><em>Ladowanie tresci...</em></p>
             : pokojDetails.renderPokoj(this.state.id, this.state.nrPokoju, this.state.nazwa, this.state.ile_osob, this.state.cena, this.state.show);
 
         return (
@@ -94,9 +94,7 @@ export class pokojDetails extends Component {
                 <br /><br />
                 <Button onClick={this.handleChecked}> Modul edycyjny
                 </Button>
-
-                <br />
-                <p>This component demonstrates fetching data from the server.</p>
+                <br /><br />
                 {contents}
             </div>
         );

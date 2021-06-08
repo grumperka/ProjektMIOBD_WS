@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using ProjectMongoDBReact.Models;
 using System;
@@ -27,13 +28,69 @@ namespace ProjectMongoDBReact.Services
             _pokoj = database.GetCollection<Pokoj>(settings.PokojCollectionName);
         }
 
+        [HttpGet]
+        public IEnumerable<Rezerwacja> Get()
+        {
+            var connectionString = "mongodb://localhost";
+            var client = new MongoClient(connectionString);
+
+            var db = client.GetDatabase("bazaDanych");
+            var collection = db.GetCollection<Rezerwacja>("rezerwacje").Find(new BsonDocument()).ToList();
+
+            return collection.Select(s => new Rezerwacja
+            {
+                Id = s.Id,
+                id_pokoju = s.id_pokoju,
+                id_klienta = s.id_klienta,
+                id_rezerwujacego = s.id_rezerwujacego,
+                poczatek = s.poczatek,
+                koniec = s.koniec,
+                koszt = s.koszt,
+                czyEdytowana = s.czyEdytowana,
+                dataEdycji = s.dataEdycji,
+                czyAnulowana = s.czyAnulowana
+            }).ToArray();
+        }
+
+        public IEnumerable<Rezerwacja> GetRezerwacje(string name)
+        {
+            var connectionString = "mongodb://localhost";
+            var client = new MongoClient(connectionString);
+
+            var db = client.GetDatabase("bazaDanych");
+            var collection = db.GetCollection<Rezerwacja>("rezerwacje").Find(new BsonDocument()).ToList();
+
+            Klient klient = _klient.Find<Klient>(f => f.email == name).FirstOrDefault();
+
+            if (klient == null) { return null; }
+
+            return collection.Where(w => w.id_klienta == klient.Id).Select(s => new Rezerwacja
+            {
+                Id = s.Id,
+                id_pokoju = s.id_pokoju,
+                id_klienta = s.id_klienta,
+                id_rezerwujacego = s.id_rezerwujacego,
+                poczatek = s.poczatek,
+                koniec = s.koniec,
+                koszt = s.koszt,
+                czyEdytowana = s.czyEdytowana,
+                dataEdycji = s.dataEdycji,
+                czyAnulowana = s.czyAnulowana
+            }).ToArray();
+        }
+
+        public Rezerwacja Get(string id) =>
+            _rezerwacja.Find<Rezerwacja>(p => p.Id == id).FirstOrDefault();
+
+
         public Rezerwacja Create(Rezerwacja r)
         {
             Klient klient = KlientCheck(r.id_rezerwujacego);
 
             var pokoj = _pokoj.Find<Pokoj>(f => f.Id == r.id_pokoju).FirstOrDefault();
 
-            if (pokoj == null) { return null; }
+            if (pokoj == null) 
+            { return null; }
 
             bool zajety = czyZajety(pokoj, r.poczatek, r.koniec);
 
@@ -79,5 +136,40 @@ namespace ProjectMongoDBReact.Services
             klient = _klient.Find<Klient>(f => f.email == email).FirstOrDefault();
             return klient;
         }
+
+        public Rezerwacja Cancel(string id) {
+            Rezerwacja cancel = _rezerwacja.Find<Rezerwacja>(p => p.Id == id).FirstOrDefault();
+            cancel.czyAnulowana = true;
+            _rezerwacja.ReplaceOne(p => p.Id == id, cancel);
+            return cancel;
+        }
+
+        public Rezerwacja Edit(string id, Rezerwacja rezerwacja)
+        {
+            Rezerwacja edit = _rezerwacja.Find<Rezerwacja>(p => p.Id == id).FirstOrDefault();
+
+            var pokoj = _pokoj.Find<Pokoj>(f => f.Id == edit.id_pokoju).FirstOrDefault();
+
+            if (pokoj == null)
+            { return null; }
+
+            bool zajety = czyZajety(pokoj, rezerwacja.poczatek, rezerwacja.koniec);
+
+            if (zajety == false)
+            {
+                String diff = (rezerwacja.koniec - rezerwacja.poczatek).TotalDays.ToString();
+                edit.poczatek = rezerwacja.poczatek;
+                edit.koniec = rezerwacja.koniec;
+                edit.dataEdycji = rezerwacja.dataEdycji;
+                int ileDni = Int32.Parse(diff);
+                edit.koszt = pokoj.cena * ileDni;
+                edit.czyEdytowana = true;
+                _rezerwacja.ReplaceOne(p => p.Id == id, edit);
+                return edit;
+            }
+            else 
+                return null;
+        }
+
     }
 }

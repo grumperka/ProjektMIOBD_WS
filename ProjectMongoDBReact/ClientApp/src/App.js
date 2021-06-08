@@ -8,6 +8,7 @@ import { Pokoje } from './components/Pokoje';
 import { addPokoj } from './components/addPokoj';
 import { pokojDetails } from './components/pokojDetails';
 import { addRezerwacja } from './components/addRezerwacja';
+import { getRezerwacje } from './components/getRezerwacje';
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
@@ -24,9 +25,10 @@ export default class App extends Component {
         <Route path='/counter' component={Counter} />
             <AuthorizeRoute path='/fetch-data' component={FetchData} />
             <AuthorizeRoute path='/pokoje' component={Pokoje} />
-            <Route path='/addPokoj' component={addPokoj} />
+            <AuthorizeRoute path='/addPokoj' component={addPokoj} />
             <Route path='/pokojDetails/:id' component={pokojDetails} />
-            <Route path='/addRezerwacja/:id' component={addRezerwacja} />
+            <AuthorizeRoute path='/addRezerwacja/:id' component={addRezerwacja} />
+            <AuthorizeRoute path='/getRezerwacje' component={getRezerwacje} />
         <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
       </Layout>
     );
