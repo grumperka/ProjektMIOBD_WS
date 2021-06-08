@@ -30,5 +30,7 @@ namespace ProjectMongoDBReact.Models
         public DateTime dataEdycji { get; set; }
 
         public bool czyAnulowana { get; set; }
+
+        public bool czyOplacona { get; set; }
     }
 }

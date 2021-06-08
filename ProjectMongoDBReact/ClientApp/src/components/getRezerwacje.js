@@ -44,7 +44,9 @@ export class getRezerwacje extends Component {
                       <th>Koniec rezerwacji</th>
                       <th>Koszt</th>
                       <th>Czy anulowana?</th>
+                      <th>Czy zaplacona?</th>
                       <th style={showM === true ? { display: 'none' } : {}}>Anuluj rezerwacje</th>
+                      <th style={showM === true ? { display: 'none' } : {}}>Zaplac</th>
                       <th style={showM === false ? { display: 'none' } : {}}>Edytuj rezerwacje</th>
                   </tr>
               </thead>
@@ -61,8 +63,12 @@ export class getRezerwacje extends Component {
                           <td>{rezerw.koszt}</td>
 
                           <td>{rezerw.czyAnulowana === false ? <Badge pill variant="success">Aktualna</Badge> : <Badge pill variant="secondary">Anulowana</Badge>}</td>
-                              
-                          <td style={showM === true || rezerw.czyAnulowana === true ? { display: 'none' } : {} }><Button variant="outline-danger" size="sm" value={rezerw.id} onClick={cancelRezerv}>Anuluj</Button></td>
+
+                          <td>{rezerw.czyOplacona === true ? <Badge pill variant="success">Zaplacone</Badge> : <Badge pill variant="secondary">Niezaplacone</Badge>}</td>
+
+                          <td style={showM === true || rezerw.czyAnulowana === true ? { display: 'none' } : {}}><Button variant="outline-danger" size="sm" value={rezerw.id} onClick={cancelRezerv}>Anuluj</Button></td>
+
+                          <td style={showM === true || rezerw.czyAnulowana === true ? { display: 'none' } : {}}><Button variant="outline-success" value={rezerw.id} onClick={makeBill}>Zaplac</Button></td>
 
                           <td style={showM === false || rezerw.czyAnulowana === true ? { display: 'none' } : {}}><Button variant="outline-warning" value={rezerw.id} onClick={editRezerv}>Edytuj</Button></td>
                           
@@ -156,3 +162,22 @@ async function editData(idRezerv) {
     return 0;
 }
 
+////////////////////////////////////// ZROBIC TO!!
+const makeBill = (event) => {
+    let e = makeData(event.target.value);
+    console.log(event.target.value);
+}
+
+async function makeData(idRezerv) {
+    const token = await authService.getAccessToken();
+
+    const headers = {
+        'Authorization': `Bearer ${token}`
+    };
+
+    axios.put(`/rachunek/MakeBill/` + idRezerv,
+        { 'id': idRezerv, 'dateTime': new Date() },
+        { headers }).catch(error => console.log(error));
+
+    return 0;
+}

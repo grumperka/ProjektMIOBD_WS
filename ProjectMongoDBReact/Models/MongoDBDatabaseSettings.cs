@@ -9,8 +9,11 @@ namespace ProjectMongoDBReact.Models
     {
         public string PokojCollectionName { get; set; }
         public string RezerwacjaCollectionName { get; set; }
+        public string RachunekCollectionName { get; set; }
+
         public string KlientCollectionName { get; set; }
         public string PracownikCollectionName { get; set; }
+
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
     }
@@ -19,8 +22,11 @@ namespace ProjectMongoDBReact.Models
     {
         string PokojCollectionName { get; set; }
         string RezerwacjaCollectionName { get; set; }
+        string RachunekCollectionName { get; set; }
+
         string KlientCollectionName { get; set; }
         string PracownikCollectionName { get; set; }
+
         string ConnectionString { get; set; }
         string DatabaseName { get; set; }
     }

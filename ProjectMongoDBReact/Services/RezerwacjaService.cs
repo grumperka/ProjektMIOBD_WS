@@ -75,7 +75,8 @@ namespace ProjectMongoDBReact.Services
                 koszt = s.koszt,
                 czyEdytowana = s.czyEdytowana,
                 dataEdycji = s.dataEdycji,
-                czyAnulowana = s.czyAnulowana
+                czyAnulowana = s.czyAnulowana,
+                czyOplacona = s.czyOplacona
             }).ToArray();
         }
 
@@ -100,7 +101,7 @@ namespace ProjectMongoDBReact.Services
 
                 int ileDni = Int32.Parse(diff);
 
-                Rezerwacja nowa = new Rezerwacja { id_klienta = klient.Id, id_rezerwujacego = klient.Id, id_pokoju = r.id_pokoju, poczatek = r.poczatek, koniec = r.koniec, koszt = r.koszt * ileDni, dataEdycji = r.dataEdycji, czyAnulowana = r.czyAnulowana, czyEdytowana = r.czyEdytowana };
+                Rezerwacja nowa = new Rezerwacja { id_klienta = klient.Id, id_rezerwujacego = klient.Id, id_pokoju = r.id_pokoju, poczatek = r.poczatek, koniec = r.koniec, koszt = r.koszt * ileDni, dataEdycji = r.dataEdycji, czyAnulowana = r.czyAnulowana, czyEdytowana = r.czyEdytowana, czyOplacona = false };
                 _rezerwacja.InsertOne(nowa);
                 return nowa;
             }
@@ -127,8 +128,9 @@ namespace ProjectMongoDBReact.Services
 
         public Klient KlientCheck(string email) {
             var klient = _klient.Find<Klient>(f => f.email == email).FirstOrDefault();
+            var pracownik = _pracownik.Find<Pracownik>(f => f.email == email).FirstOrDefault();
 
-            if (klient == null)
+            if (klient == null && pracownik == null)
             {
                 _klient.InsertOne(new Klient { email = email, imie = "Joe/Jane", nazwisko = "Doe", nr_tel = 000000000 });
             }

@@ -44,6 +44,7 @@ namespace ProjectMongoDBReact
 
             services.AddSingleton<PokojService>();
             services.AddSingleton<RezerwacjaService>();
+            services.AddSingleton<RachunekService>();
             services.AddSingleton<KlientService>();
             services.AddSingleton<PracownikService>();
 
