@@ -111,7 +111,10 @@ const deletePokoj = (event) => {
 async function deleteData(idPokoj) {
     const token = await authService.getAccessToken();
 
-    axios.delete(`/pokoj/Delete/` + idPokoj,
+    const [isAuthenticated, user] = await Promise.all([authService.isAuthenticated(), authService.getUser()]);
+
+
+    axios.delete(`/pokoj/Delete/` + idPokoj + '/' + user.name,
         {
             headers: {
                 Authorization: `Bearer ${token}`

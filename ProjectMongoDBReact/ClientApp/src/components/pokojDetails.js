@@ -131,13 +131,17 @@ const deletePokoj = (event) => {
 async function deleteData(idPokoj) {
     const token = await authService.getAccessToken();
 
-    axios.delete(`/pokoj/Delete/` + idPokoj,
+    const [isAuthenticated, user] = await Promise.all([authService.isAuthenticated(), authService.getUser()]);
+
+
+    axios.delete(`/pokoj/Delete/` + idPokoj + '/' + user.name,
         {
             headers: {
                 Authorization: `Bearer ${token}`
             },
             data: {
-                'id': idPokoj
+                'id': idPokoj,
+                'userName': user.name
             }
 
         }).then(window.location.reload());
@@ -168,6 +172,8 @@ async function editData(idPokoj) {
 
     const token = await authService.getAccessToken();
 
+    const [isAuthenticated, user] = await Promise.all([authService.isAuthenticated(), authService.getUser()]);
+
     const data = {
         id: idPokoj,
         Pokoj: PokojM
@@ -177,8 +183,8 @@ async function editData(idPokoj) {
         'Authorization': `Bearer ${token}`
     };
 
-    axios.put(`/pokoj/Put/` + idPokoj,
-        { 'id': idPokoj, 'nr_pokoju': PokojM.nr_pokoju, 'nazwa': PokojM.nazwa, 'ile_osob': PokojM.ile_osob, 'cena': PokojM.cena },
+    axios.put(`/pokoj/Put/` + idPokoj + '/' + user.name,
+        { 'id': idPokoj, 'nr_pokoju': PokojM.nr_pokoju, 'nazwa': PokojM.nazwa, 'ile_osob': PokojM.ile_osob, 'cena': PokojM.cena, 'userName': user.name },
         { headers }).catch(error => console.log(error));
 
     return 0;

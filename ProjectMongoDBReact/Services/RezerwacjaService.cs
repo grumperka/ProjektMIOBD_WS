@@ -106,6 +106,9 @@ namespace ProjectMongoDBReact.Services
 
                 int ileDni = Int32.Parse(diff);
 
+                if (ileDni < 0)
+                { return null; }
+
                 Rezerwacja nowa = new Rezerwacja { id_klienta = klient.Id, id_rezerwujacego = klient.Id, id_pokoju = r.id_pokoju, poczatek = r.poczatek, koniec = r.koniec, koszt = r.koszt * ileDni, dataEdycji = r.dataEdycji, czyAnulowana = r.czyAnulowana, czyEdytowana = r.czyEdytowana, czyOplacona = false };
                 _rezerwacja.InsertOne(nowa);
                 return nowa;
@@ -162,13 +165,18 @@ namespace ProjectMongoDBReact.Services
 
             bool zajety = czyZajety(pokoj, rezerwacja.poczatek, rezerwacja.koniec);
 
+
             if (zajety == false)
             {
                 String diff = (rezerwacja.koniec - rezerwacja.poczatek).TotalDays.ToString();
+                int ileDni = Int32.Parse(diff);
+
+                if (ileDni < 0) { return null; }
+
                 edit.poczatek = rezerwacja.poczatek;
                 edit.koniec = rezerwacja.koniec;
                 edit.dataEdycji = rezerwacja.dataEdycji;
-                int ileDni = Int32.Parse(diff);
+                
                 edit.koszt = pokoj.cena * ileDni;
                 edit.czyEdytowana = true;
                 _rezerwacja.ReplaceOne(p => p.Id == id, edit);

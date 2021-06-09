@@ -13,6 +13,7 @@ namespace MongodbDatabase.Services
     public class PokojService
     {
         private readonly IMongoCollection<Pokoj> _pokoj;
+        private readonly IMongoCollection<Pracownik> _pracownik;
 
         public PokojService(IMongoDBDatabaseSettings settings)
         {
@@ -20,6 +21,7 @@ namespace MongodbDatabase.Services
             var database = client.GetDatabase(settings.DatabaseName);
 
             _pokoj = database.GetCollection<Pokoj>(settings.PokojCollectionName);
+            _pracownik = database.GetCollection<Pracownik>(settings.PracownikCollectionName);
         }
 
         [HttpGet]
@@ -45,23 +47,48 @@ namespace MongodbDatabase.Services
         public Pokoj Get(string id) =>
             _pokoj.Find<Pokoj>(p => p.Id == id).FirstOrDefault(); 
 
-        public Pokoj Create(Pokoj p)
+        public Pokoj Create(Pokoj p, string userName)
         {
-            _pokoj.InsertOne(new Pokoj { nr_pokoju = p.nr_pokoju, cena = p.cena, ile_osob = p.ile_osob, nazwa = p.nazwa });
+            var pr = _pracownik.Find<Pracownik>(f => f.email == userName).FirstOrDefault();
 
-            return p;
+            if (pr != null)
+            {
+                _pokoj.InsertOne(new Pokoj { nr_pokoju = p.nr_pokoju, cena = p.cena, ile_osob = p.ile_osob, nazwa = p.nazwa });
+
+                return p;
+            }
+            return null;
         }
 
-       
 
-        public void Update(string id, Pokoj pokojIn) =>
+
+        public Pokoj Update(string id, Pokoj pokojIn, string userName) {
+
+            var p = _pracownik.Find<Pracownik>(f => f.email == userName).FirstOrDefault();
+
+            if (p == null)
+            {
+                return null;
+            }
+
             _pokoj.ReplaceOne(p => p.Id == id, pokojIn);
+
+            return pokojIn;
+        }
+            
 
         public void Remove(Pokoj pokojIn) =>
             _pokoj.DeleteOne(p => p.Id == pokojIn.Id);
 
-        public void Remove(string id) =>
-            _pokoj.DeleteOne(p => p.Id == id);
+        public void Remove(string id, string userName) {
+            var p = _pracownik.Find<Pracownik>(f => f.email == userName).FirstOrDefault();
+
+            if (p != null)
+            {
+                _pokoj.DeleteOne(p => p.Id == id);
+            }
+        }
+            
     }
 }
 

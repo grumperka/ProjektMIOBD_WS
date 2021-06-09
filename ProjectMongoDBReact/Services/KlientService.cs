@@ -51,5 +51,23 @@ namespace ProjectMongoDBReact.Services
 
             }
         }
+
+        [HttpGet]
+        public Klient GetUser(string name)
+        {
+                var connectionString = "mongodb://localhost";
+                var client = new MongoClient(connectionString);
+
+                var db = client.GetDatabase("bazaDanych");
+                var collection = db.GetCollection<Klient>("klienci").Find(new BsonDocument()).ToList();
+
+                return collection.Where(w => w.email == name).FirstOrDefault();
+
+        }
+
+        public void Edit(string id, Klient klient)
+        {
+            _klient.ReplaceOne(p => p.Id == id, klient);
+        }
     }
 }

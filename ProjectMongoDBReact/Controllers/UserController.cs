@@ -12,7 +12,7 @@ namespace ProjectMongoDBReact.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class UserController : Controller
+    public class UserController : ControllerBase
     {
         private readonly KlientService _klientService;
         private readonly PracownikService _pracownikService;
@@ -49,6 +49,49 @@ namespace ProjectMongoDBReact.Controllers
             }
 
             return p;
+        }
+
+        [HttpGet(Name = "GetUser")]
+        [Route("GetUser/{name}")]
+        public object GetUser(string name)
+        {
+            var p = _pracownikService.GetUser(name);
+
+            if (p == null)
+            {
+                var k = _klientService.GetUser(name);
+
+                if (k == null)
+                {
+                    return null;
+                }
+
+                return k;
+            }
+
+            return p;
+        }
+
+        [HttpPut("{id:length(24)}")]
+        [Route("Edit/{id}")]
+        public IActionResult Edit(string id, Klient klient)
+        {
+            var p = _pracownikService.GetUser(klient.email);
+
+            if (p == null)
+            {
+                var k = _klientService.GetUser(klient.email);
+
+                if (k == null) {
+                    return null;
+                }
+
+                _klientService.Edit(id, klient);
+            }
+
+            _pracownikService.Edit(id, new Pracownik { Id = klient.Id, imie = klient.imie, nazwisko = klient.nazwisko, nr_tel = klient.nr_tel, email = klient.email});
+
+            return NoContent();
         }
     }
 }

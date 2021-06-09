@@ -42,19 +42,21 @@ export class addPokoj extends Component {
             headers: { Authorization: `Bearer ${token}` }
         };
 
+        const [isAuthenticated, user] = await Promise.all([authService.isAuthenticated(), authService.getUser()]);
+
         const Pokoj = {  //obiekt do przesłania
             'Id': 'brak',
             'nr_pokoju': parseInt(this.state.nrPokoju, 10),
             'nazwa': this.state.nazwaPokoju,
             'ile_osob': parseInt(this.state.ileOsobPokoju, 10),
-            'cena': parseInt(this.state.cenaPokoju, 10)
+            'cena': parseInt(this.state.cenaPokoju, 10),
         }
 
         axios({
             method: 'post', //metoda przesłania z axios
-            url: `https://localhost:44334/pokoj`, //adres do przesłania
+            url: 'https://localhost:44334/pokoj/Post/' + user.name, //adres do przesłania
             headers: { Authorization: `Bearer ${token}` },
-            data: Pokoj //dane do przesłania
+            data: Pokoj, 'userName': user.name  //dane do przesłania
         }).then(
             window.location.replace('https://localhost:44334/pokoj')
         );

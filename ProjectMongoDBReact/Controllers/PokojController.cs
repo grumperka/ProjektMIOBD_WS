@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongodbDatabase.Services;
+using ProjectMongoDBReact.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,12 @@ namespace ProjectMongoDBReact.Models
     public class PokojController : ControllerBase
         {
             private readonly PokojService _pokojService;
+            private readonly PracownikService _pracownikService;
 
-            public PokojController(PokojService pokojService)
+            public PokojController(PokojService pokojService, PracownikService pracownikService)
             {
                 _pokojService = pokojService;
+                _pracownikService = pracownikService;
             }
 
             [HttpGet]
@@ -41,17 +44,18 @@ namespace ProjectMongoDBReact.Models
             }
 
             [HttpPost]
-            public ActionResult<Pokoj> Create(Pokoj p)
+            [Route("Post/{userName}")]
+            public ActionResult<Pokoj> Create(Pokoj p, string userName)
             {
-                _pokojService.Create(p);
+                _pokojService.Create(p, userName);
 
                 return NoContent();
                 //CreatedAtRoute("GetPokoj", new { id = p.Id.ToString() }, p);
             }
 
             [HttpPut("{id:length(24)}")]
-            [Route("Put/{id}")]
-            public IActionResult Update(string id, Pokoj pokojIn)
+            [Route("Put/{id}/{userName}")]
+            public IActionResult Update(string id, Pokoj pokojIn, string userName)
             {
                 var p = _pokojService.Get(id);
 
@@ -60,14 +64,14 @@ namespace ProjectMongoDBReact.Models
                     return NotFound();
                 }
 
-                _pokojService.Update(id, pokojIn);
+                _pokojService.Update(id, pokojIn, userName);
 
                 return NoContent();
             }
 
             [HttpDelete("{id:length(24)}")]
-            [Route("Delete/{id}")]
-            public IActionResult Delete(string id)
+            [Route("Delete/{id}/{userName}")]
+            public IActionResult Delete(string id, string userName)
             {
                 var p = _pokojService.Get(id);
 
@@ -76,7 +80,7 @@ namespace ProjectMongoDBReact.Models
                     return NotFound();
                 }
 
-                _pokojService.Remove(p.Id);
+                _pokojService.Remove(p.Id, userName);
 
                 return NoContent();
             }
