@@ -12,6 +12,7 @@ namespace ProjectMongoDBReact.Services
     public class KlientService
     {
         private readonly IMongoCollection<Klient> _klient;
+        private readonly IMongoCollection<Pracownik> _pracownik;
 
         public KlientService(IMongoDBDatabaseSettings settings)
         {
@@ -19,12 +20,21 @@ namespace ProjectMongoDBReact.Services
             var database = client.GetDatabase(settings.DatabaseName);
 
             _klient = database.GetCollection<Klient>(settings.KlientCollectionName);
+            _pracownik = database.GetCollection<Pracownik>(settings.PracownikCollectionName);
         }
 
         [HttpGet]
-        public IEnumerable<Klient> Get()
+        public IEnumerable<Klient> Get(string name)
         {
-            var connectionString = "mongodb://localhost";
+            Pracownik pracownik = _pracownik.Find<Pracownik>(f => f.email == name).FirstOrDefault();
+
+            if (pracownik == null)
+            {
+                return null;
+            }
+            else
+            {
+                var connectionString = "mongodb://localhost";
             var client = new MongoClient(connectionString);
 
             var db = client.GetDatabase("bazaDanych");
@@ -38,6 +48,8 @@ namespace ProjectMongoDBReact.Services
                 nr_tel = s.nr_tel,
                 email = s.email
             }).ToArray();
+
+            }
         }
     }
 }

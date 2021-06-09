@@ -22,22 +22,31 @@ namespace ProjectMongoDBReact.Services
         }
 
         [HttpGet]
-        public IEnumerable<Pracownik> Get()
+        public IEnumerable<Pracownik> Get(string name)
         {
-            var connectionString = "mongodb://localhost";
-            var client = new MongoClient(connectionString);
+            Pracownik pracownik = _pracownik.Find<Pracownik>(f => f.email == name).FirstOrDefault();
 
-            var db = client.GetDatabase("bazaDanych");
-            var collection = db.GetCollection<Pracownik>("pracownicy").Find(new BsonDocument()).ToList();
-
-            return collection.Select(s => new Pracownik
+            if (pracownik == null)
             {
-                Id = s.Id,
-                nazwisko = s.nazwisko,
-                imie = s.imie,
-                nr_tel = s.nr_tel,
-                email = s.email
-            }).ToArray();
+                return null;
+            }
+            else
+            {
+                var connectionString = "mongodb://localhost";
+                var client = new MongoClient(connectionString);
+
+                var db = client.GetDatabase("bazaDanych");
+                var collection = db.GetCollection<Pracownik>("pracownicy").Find(new BsonDocument()).ToList();
+
+                return collection.Select(s => new Pracownik
+                {
+                    Id = s.Id,
+                    nazwisko = s.nazwisko,
+                    imie = s.imie,
+                    nr_tel = s.nr_tel,
+                    email = s.email
+                }).ToArray();
+            }
         }
     }
 }

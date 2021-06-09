@@ -21,7 +21,7 @@ namespace ProjectMongoDBReact.Controllers
             _rachunekService = rachunekService;
         }
 
-        [HttpGet(Name = "Get")]
+        [HttpGet(Name = "GetRachunek")]
         [Route("GetRachunek/{name}")]
         public IEnumerable<Rachunek> GetAll(string name)
         {
