@@ -5,8 +5,8 @@ import $ from 'jquery';
 import authService from './api-authorization/AuthorizeService'
 import 'regenerator-runtime/runtime'
 
-export class getRezerwacje extends Component {
-    static displayName = getRezerwacje.name;
+export class getAllRezerwacje extends Component {
+    static displayName = getAllRezerwacje.name;
 
   constructor(props) {
     super(props);
@@ -68,7 +68,7 @@ export class getRezerwacje extends Component {
 
                           <td style={showM === true || rezerw.czyAnulowana === true ? { display: 'none' } : {}}><Button variant="outline-danger" size="sm" value={rezerw.id} onClick={cancelRezerv}>Anuluj</Button></td>
 
-                          <td style={showM === true || rezerw.czyAnulowana === true || rezerw.czyUregulowany === true ? { display: 'none' } : {}}><Button variant="outline-success" value={rezerw.id} onClick={makeBill}>Zaplac</Button></td>
+                          <td style={showM === true || rezerw.czyAnulowana === true ? { display: 'none' } : {}}><Button variant="outline-success" value={rezerw.id} onClick={makeBill}>Zaplac</Button></td>
 
                           <td style={showM === false || rezerw.czyAnulowana === true ? { display: 'none' } : {}}><Button variant="outline-warning" value={rezerw.id} onClick={editRezerv}>Edytuj</Button></td>
                           
@@ -84,11 +84,11 @@ export class getRezerwacje extends Component {
   render() {
     let contents = this.state.loading
         ? <p><em>Ladowanie tresci...</em></p>
-        : getRezerwacje.renderRezerwacjeTable(this.state.rezerwacje, this.state.show);
+        : getAllRezerwacje.renderRezerwacjeTable(this.state.rezerwacje, this.state.show);
 
     return (
       <div>
-            <h1 id="tabelLabel" >Lista twoich rezerwacji</h1>
+            <h1 id="tabelLabel" >Lista rezerwacji</h1>
             <br /><br />
             <Button onClick={this.handleChecked}> Modul edycyjny
                 </Button>
@@ -108,7 +108,7 @@ export class getRezerwacje extends Component {
           name: user.name
       });
 
-    const response = await fetch('rezerwacja/GetRezerwacje/' + this.state.name, {
+    const response = await fetch('rezerwacja/GetRezerwacja/' + this.state.name, {
       headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
     });
       const data = await response.json();

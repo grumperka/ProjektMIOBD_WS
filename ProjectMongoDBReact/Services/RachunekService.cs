@@ -13,6 +13,7 @@ namespace ProjectMongoDBReact.Services
     {
         private readonly IMongoCollection<Rachunek> _rachunek;
         private readonly IMongoCollection<Rezerwacja> _rezerwacja;
+        private readonly IMongoCollection<Pracownik> _pracownik;
 
         public RachunekService(IMongoDBDatabaseSettings settings)
         {
@@ -20,27 +21,37 @@ namespace ProjectMongoDBReact.Services
             var database = client.GetDatabase(settings.DatabaseName);
 
             _rachunek = database.GetCollection<Rachunek>(settings.RachunekCollectionName);
+            _pracownik = database.GetCollection<Pracownik>(settings.PracownikCollectionName);
             _rezerwacja = database.GetCollection<Rezerwacja>(settings.RezerwacjaCollectionName);
         }
 
         [HttpGet]
-        public IEnumerable<Rachunek> Get()
+        public IEnumerable<Rachunek> Get(string name)
         {
-            var connectionString = "mongodb://localhost";
-            var client = new MongoClient(connectionString);
+            Pracownik pracownik = _pracownik.Find<Pracownik>(f => f.email == name).FirstOrDefault();
 
-            var db = client.GetDatabase("bazaDanych");
-            var collection = db.GetCollection<Rachunek>("rachunki").Find(new BsonDocument()).ToList();
-
-            return collection.Select(s => new Rachunek
+            if (pracownik == null)
             {
-                Id = s.Id,
-                id_rezerwacji = s.id_rezerwacji,
-                koniec = s.koniec,
-                koszt = s.koszt,
-                czyUregulowany = s.czyUregulowany,
-                dataUregulowania = s.dataUregulowania
-            }).ToArray();
+                return null;
+            }
+            else
+            {
+                var connectionString = "mongodb://localhost";
+                var client = new MongoClient(connectionString);
+
+                var db = client.GetDatabase("bazaDanych");
+                var collection = db.GetCollection<Rachunek>("rachunki").Find(new BsonDocument()).ToList();
+
+                return collection.Select(s => new Rachunek
+                {
+                    Id = s.Id,
+                    id_rezerwacji = s.id_rezerwacji,
+                    koniec = s.koniec,
+                    koszt = s.koszt,
+                    czyUregulowany = s.czyUregulowany,
+                    dataUregulowania = s.dataUregulowania
+                }).ToArray();
+            }
         }
 
         public Rachunek PayBill(string id, DateTime dateTime)

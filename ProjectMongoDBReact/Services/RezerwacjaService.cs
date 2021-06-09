@@ -29,8 +29,15 @@ namespace ProjectMongoDBReact.Services
         }
 
         [HttpGet]
-        public IEnumerable<Rezerwacja> Get()
+        public IEnumerable<Rezerwacja> Get(string name)
         {
+            Pracownik pracownik = _pracownik.Find<Pracownik>(f => f.email == name).FirstOrDefault();
+
+            if (pracownik == null) 
+            { 
+                return null; 
+            }
+            else { 
             var connectionString = "mongodb://localhost";
             var client = new MongoClient(connectionString);
 
@@ -50,6 +57,7 @@ namespace ProjectMongoDBReact.Services
                 dataEdycji = s.dataEdycji,
                 czyAnulowana = s.czyAnulowana
             }).ToArray();
+            }
         }
 
         public IEnumerable<Rezerwacja> GetRezerwacje(string name)
@@ -79,9 +87,6 @@ namespace ProjectMongoDBReact.Services
                 czyOplacona = s.czyOplacona
             }).ToArray();
         }
-
-        public Rezerwacja Get(string id) =>
-            _rezerwacja.Find<Rezerwacja>(p => p.Id == id).FirstOrDefault();
 
 
         public Rezerwacja Create(Rezerwacja r)

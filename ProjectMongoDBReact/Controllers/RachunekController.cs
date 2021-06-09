@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProjectMongoDBReact.Models;
 using ProjectMongoDBReact.Services;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,20 @@ namespace ProjectMongoDBReact.Controllers
         public RachunekController(RachunekService rachunekService)
         {
             _rachunekService = rachunekService;
+        }
+
+        [HttpGet(Name = "Get")]
+        [Route("GetRachunek/{name}")]
+        public IEnumerable<Rachunek> GetAll(string name)
+        {
+            var p = _rachunekService.Get(name);
+
+            if (p == null)
+            {
+                return null;
+            }
+
+            return p;
         }
 
         [HttpPut("{id:length(24)}")]
