@@ -117,7 +117,7 @@ export class getRezerwacje extends Component {
 
 }
 
-////////////////////////////////////
+////////////////////////////////////COS nie dziala
 const cancelRezerv = (event) => {
     let e = cancelData(event.target.value);
     console.log(event.target.value);
@@ -134,12 +134,15 @@ async function cancelData(idRezerv) {
 
     axios.put(`/rezerwacja/Cancel/` + idRezerv,
         { 'id': idRezerv },
-        { headers }).catch(error => console.log(error));
+        { headers })
+        .then(
+            window.location.replace('https://localhost:44334/getRezerwacje')
+        ).catch(error => console.log(error));
         
     return 0;
 }
 
-//////////////////////////////////////
+//////////////////////////////////////cos nie dziala
 const editRezerv = (event) => {
     let e = editData(event.target.value);
     console.log(event.target.value);
@@ -157,7 +160,11 @@ async function editData(idRezerv) {
 
     axios.put(`/rezerwacja/Edit/` + idRezerv,
         { 'id': idRezerv, 'poczatek': poczatekInput, 'koniec': koniecInput, 'dataEdycji': new Date() },
-        { headers }).catch(error => console.log(error));
+        { headers })
+        .then(
+            window.location.reload()
+        )
+        .catch(error => console.log(error));
 
     return 0;
 }
@@ -177,7 +184,11 @@ async function makeData(idRezerv) {
 
     axios.put(`/rachunek/MakeBill/` + idRezerv,
         { 'id': idRezerv, 'dateTime': new Date() },
-        { headers }).catch(error => console.log(error));
+        { headers })
+        .then(
+            window.location.replace('https://localhost:44334/getRezerwacje')
+    )
+        .catch(error => console.log(error));
 
     return 0;
 }

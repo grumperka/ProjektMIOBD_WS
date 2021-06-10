@@ -139,7 +139,7 @@ async function editData(idUser) {
 
     axios.put(`/user/Edit/` + idUser,
         { 'id': idUser, 'imie': imie, 'nazwisko': nazwisko, 'nr_tel': nr_tel, 'email': email},
-        { headers }).catch(error => console.log(error));
+        { headers }).then(window.location.reload()).catch(error => console.log(error));
 
     return 0;
 }

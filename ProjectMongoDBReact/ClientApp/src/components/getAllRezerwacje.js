@@ -134,7 +134,9 @@ async function cancelData(idRezerv) {
 
     axios.put(`/rezerwacja/Cancel/` + idRezerv,
         { 'id': idRezerv },
-        { headers }).catch(error => console.log(error));
+        { headers }).then(
+            window.location.reload()
+        ).catch(error => console.log(error));
         
     return 0;
 }
@@ -157,7 +159,9 @@ async function editData(idRezerv) {
 
     axios.put(`/rezerwacja/Edit/` + idRezerv,
         { 'id': idRezerv, 'poczatek': poczatekInput, 'koniec': koniecInput, 'dataEdycji': new Date() },
-        { headers }).catch(error => console.log(error));
+        { headers }).then(
+            window.location.reload()
+        ).catch(error => console.log(error));
 
     return 0;
 }
@@ -177,7 +181,9 @@ async function makeData(idRezerv) {
 
     axios.put(`/rachunek/MakeBill/` + idRezerv,
         { 'id': idRezerv, 'dateTime': new Date() },
-        { headers }).catch(error => console.log(error));
+        { headers }).then(
+            window.location.reload()
+        ).catch(error => console.log(error));
 
     return 0;
 }

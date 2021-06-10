@@ -30,7 +30,6 @@ export class addPokoj extends Component {
     }
 
     handleSubmit(event) {
-        alert('Dodano pokoj: ' + this.state.nazwaPokoju);
         event.preventDefault();
         this.postData();
     }
@@ -58,7 +57,7 @@ export class addPokoj extends Component {
             headers: { Authorization: `Bearer ${token}` },
             data: Pokoj, 'userName': user.name  //dane do przesłania
         }).then(
-            window.location.replace('https://localhost:44334/pokoj')
+            window.location.replace('https://localhost:44334/pokoje')
         );
 
     }
@@ -85,7 +84,7 @@ export class addPokoj extends Component {
                         <Form.Control type="text" name="cena" value={this.state.cenaPokoju} ref={this.cenaPokojuInput} onChange={this.handleChange}/>
                     </Form.Label><br />
                     <Button variant="primary" type="submit">
-                        Wyslij
+                        Dodaj pokoj
                      </Button>
                 </Form>
             </div>

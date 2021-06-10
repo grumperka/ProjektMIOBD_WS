@@ -55,9 +55,16 @@ namespace ProjectMongoDBReact.Services
                 koszt = s.koszt,
                 czyEdytowana = s.czyEdytowana,
                 dataEdycji = s.dataEdycji,
-                czyAnulowana = s.czyAnulowana
+                czyAnulowana = s.czyAnulowana,
+                czyOplacona = s.czyOplacona
             }).ToArray();
             }
+        }
+
+        [HttpGet]
+        public Rezerwacja GetOne(string id)
+        {
+            return _rezerwacja.Find<Rezerwacja>(w => w.Id == id).FirstOrDefault();
         }
 
         public IEnumerable<Rezerwacja> GetRezerwacje(string name)
@@ -68,9 +75,7 @@ namespace ProjectMongoDBReact.Services
             var db = client.GetDatabase("bazaDanych");
             var collection = db.GetCollection<Rezerwacja>("rezerwacje").Find(new BsonDocument()).ToList();
 
-            Klient klient = _klient.Find<Klient>(f => f.email == name).FirstOrDefault();
-
-            if (klient == null) { return null; }
+            Klient klient = KlientCheck(name);
 
             return collection.Where(w => w.id_klienta == klient.Id).Select(s => new Rezerwacja
             {
@@ -91,7 +96,7 @@ namespace ProjectMongoDBReact.Services
 
         public Rezerwacja Create(Rezerwacja r)
         {
-            Klient klient = KlientCheck(r.id_rezerwujacego);
+            var klient = KlientCheck(r.id_rezerwujacego);
 
             var pokoj = _pokoj.Find<Pokoj>(f => f.Id == r.id_pokoju).FirstOrDefault();
 
@@ -141,10 +146,11 @@ namespace ProjectMongoDBReact.Services
             if (klient == null && pracownik == null)
             {
                 _klient.InsertOne(new Klient { email = email, imie = "Joe/Jane", nazwisko = "Doe", nr_tel = 000000000 });
+                klient = _klient.Find<Klient>(f => f.email == email).FirstOrDefault();
+                return klient;
             }
 
-            klient = _klient.Find<Klient>(f => f.email == email).FirstOrDefault();
-            return klient;
+            return new Klient { Id = pracownik.Id, imie = pracownik.imie, nazwisko = pracownik.nazwisko, email = pracownik.email, nr_tel = pracownik.nr_tel };
         }
 
         public Rezerwacja Cancel(string id) {

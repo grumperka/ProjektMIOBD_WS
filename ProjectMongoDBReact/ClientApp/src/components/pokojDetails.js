@@ -144,7 +144,9 @@ async function deleteData(idPokoj) {
                 'userName': user.name
             }
 
-        }).then(window.location.reload());
+        }).then(
+            window.location.replace('https://localhost:44334/pokoje')
+        );
 
 
 
@@ -185,7 +187,7 @@ async function editData(idPokoj) {
 
     axios.put(`/pokoj/Put/` + idPokoj + '/' + user.name,
         { 'id': idPokoj, 'nr_pokoju': PokojM.nr_pokoju, 'nazwa': PokojM.nazwa, 'ile_osob': PokojM.ile_osob, 'cena': PokojM.cena, 'userName': user.name },
-        { headers }).catch(error => console.log(error));
+        { headers }).then(window.location.reload()).catch (error => console.log(error));
 
     return 0;
 }

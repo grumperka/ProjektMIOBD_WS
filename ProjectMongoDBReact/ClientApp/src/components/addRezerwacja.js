@@ -5,9 +5,6 @@ import $ from 'jquery';
 import authService from './api-authorization/AuthorizeService'
 import 'regenerator-runtime/runtime'
 
-
-
-
 export class addRezerwacja extends Component {
     static displayName = addRezerwacja.name;
 
@@ -69,9 +66,12 @@ export class addRezerwacja extends Component {
             url: `https://localhost:44334/rezerwacja`, //adres do przesłania
             headers: { Authorization: `Bearer ${token}` },
             data: Rezerwacja //dane do przesłania
-        }).catch(error => {
-            console.log(error.response.data);
-           });
+        }).then(
+            window.location.replace('https://localhost:44334/getRezerwacje')
+        ).catch(error => {
+            console.log("Wystapil blad. Wybierz inna date.");
+        }
+        );
 
     }
 

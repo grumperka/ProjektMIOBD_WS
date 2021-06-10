@@ -63,7 +63,7 @@ namespace ProjectMongoDBReact.Controllers
         [Route("Cancel/{id}")]
         public IActionResult Cancel(string id)
         {
-            var p = _rezerwacjaService.Get(id);
+            var p = _rezerwacjaService.GetOne(id);
 
             if (p == null)
             {
@@ -79,7 +79,7 @@ namespace ProjectMongoDBReact.Controllers
         [Route("Edit/{id}")]
         public IActionResult Edit(string id, Rezerwacja rezerwacja)
         {
-            var p = _rezerwacjaService.Get(id);
+            var p = _rezerwacjaService.GetOne(id);
 
             if (p == null)
             {
