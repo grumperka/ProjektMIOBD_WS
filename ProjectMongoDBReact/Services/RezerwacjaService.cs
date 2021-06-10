@@ -149,7 +149,10 @@ namespace ProjectMongoDBReact.Services
                 klient = _klient.Find<Klient>(f => f.email == email).FirstOrDefault();
                 return klient;
             }
-
+            else if (klient != null) {
+                return klient;
+            }
+            
             return new Klient { Id = pracownik.Id, imie = pracownik.imie, nazwisko = pracownik.nazwisko, email = pracownik.email, nr_tel = pracownik.nr_tel };
         }
 

@@ -43,7 +43,21 @@ namespace ProjectMongoDBReact.Models
                 return p;
             }
 
-            [HttpPost]
+        [HttpGet(Name = "getVacancy")]
+        [Route("getVacancy/{startDate}/{endDate}")]
+        public IEnumerable<Pokoj> getVacancy(DateTime startDate, DateTime endDate)
+        {
+            var p = _pokojService.getVacancy(startDate, endDate);
+
+            if (p == null)
+            {
+                return null;
+            }
+
+            return p;
+        }
+
+        [HttpPost]
             [Route("Post/{userName}")]
             public ActionResult<Pokoj> Create(Pokoj p, string userName)
             {

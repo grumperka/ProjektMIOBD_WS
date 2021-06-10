@@ -1,4 +1,4 @@
-﻿﻿import React, { Component, useState } from 'react';
+﻿import React, { Component, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 import $ from 'jquery';
@@ -10,7 +10,7 @@ export class addRezerwacja extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { id: props.match.params.id, pokoj: '', startDate: new Date(), endDate: new Date(), loading: true};
+        this.state = { id: props.match.params.id, pokoj: '', startDate: new Date(), endDate: new Date(), loading: true };
 
         this.handleChangeStart = this.handleChangeStart.bind(this);
         this.handleChangeEnd = this.handleChangeEnd.bind(this);
