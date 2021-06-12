@@ -26,8 +26,7 @@ namespace MongodbDatabase.Services
             _rezerwacja = database.GetCollection<Rezerwacja>(settings.RezerwacjaCollectionName);
         }
 
-        [HttpGet]
-        public IEnumerable<Pokoj> Get()
+        public IEnumerable<Pokoj> GetPokoje()
         {
             var connectionString = "mongodb://localhost";
             var client = new MongoClient(connectionString);

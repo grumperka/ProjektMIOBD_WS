@@ -25,9 +25,10 @@ namespace ProjectMongoDBReact.Models
                 _pracownikService = pracownikService;
             }
 
-            [HttpGet]
-            public IEnumerable<Pokoj> Get() =>
-                _pokojService.Get();
+            [HttpGet(Name = "GetPokoje")]
+            [Route("GetPokoje")]
+            public IEnumerable<Pokoj> GetPokoje() =>
+                _pokojService.GetPokoje();
 
             [HttpGet("{id:length(24)}", Name = "GetPokoj")]
             [Route("GetPokoj/{id}")]

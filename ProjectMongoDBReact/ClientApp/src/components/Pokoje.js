@@ -95,7 +95,7 @@ export class Pokoje extends Component {
 
   async populatePokojData() {
     const token = await authService.getAccessToken();
-    const response = await fetch('pokoj', {
+    const response = await fetch('pokoj/GetPokoje', {
       headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
     });
     const data = await response.json();
