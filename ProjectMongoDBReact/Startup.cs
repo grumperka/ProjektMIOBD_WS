@@ -14,6 +14,7 @@ using MongoDB.Driver;
 using MongodbDatabase.Services;
 using ProjectMongoDBReact.Data;
 using ProjectMongoDBReact.Models;
+using Steeltoe.Discovery.Client;
 
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -47,6 +48,15 @@ namespace ProjectMongoDBReact
             services.AddSingleton<RachunekService>();
             services.AddSingleton<KlientService>();
             services.AddSingleton<PracownikService>();
+            //////////////////
+            ///EUREKA
+            ///
+            services.AddMvc();
+
+            services.AddDiscoveryClient(Configuration);
+
+            services.AddControllers();
+
 
             ////////////////////
 
@@ -67,6 +77,7 @@ namespace ProjectMongoDBReact
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -96,9 +107,17 @@ namespace ProjectMongoDBReact
 
             app.UseRouting();
 
+            ////EUREKA
+            ///
+            app.UseDiscoveryClient();
+
+            //////
+
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
+
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -116,6 +135,8 @@ namespace ProjectMongoDBReact
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+
+            
         }
     }
 }
