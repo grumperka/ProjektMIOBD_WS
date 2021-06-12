@@ -13,6 +13,7 @@ import { getKlienci } from './components/getKlienci';
 import { getPracownicy } from './components/getPracownicy';
 import { userDetails } from './components/userDetails';
 import { checkPokoj } from './components/checkPokoj';
+import { userData } from './components/userData';
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
@@ -37,6 +38,7 @@ export default class App extends Component {
             <AuthorizeRoute path='/getPracownicy' component={getPracownicy} />
             <AuthorizeRoute path='/userDetails' component={userDetails} />
             <AuthorizeRoute path='/checkPokoj' component={checkPokoj} />
+            <AuthorizeRoute path='/userData/:email' component={userData} />
         <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
       </Layout>
     );

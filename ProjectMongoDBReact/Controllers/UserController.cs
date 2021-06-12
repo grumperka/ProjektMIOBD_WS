@@ -24,10 +24,10 @@ namespace ProjectMongoDBReact.Controllers
         }
 
         [HttpGet(Name = "GetKlient")]
-        [Route("GetKlient/{name}")]
-        public IEnumerable<Klient> GetKlienci(string name)
+        [Route("GetKlient/{name}/{phrase}")]
+        public IEnumerable<Klient> GetKlienci(string name, string phrase)
         {
-            var p = _klientService.Get(name);
+            var p = _klientService.Get(name, phrase);
 
             if (p == null)
             {
@@ -38,10 +38,10 @@ namespace ProjectMongoDBReact.Controllers
         }
 
         [HttpGet(Name = "GetPracownik")]
-        [Route("GetPracownik/{name}")]
-        public IEnumerable<Pracownik> GetPracownicy(string name)
+        [Route("GetPracownik/{name}/{phrase}")]
+        public IEnumerable<Pracownik> GetPracownicy(string name, string phrase)
         {
-            var p = _pracownikService.Get(name);
+            var p = _pracownikService.Get(name, phrase);
 
             if (p == null)
             {

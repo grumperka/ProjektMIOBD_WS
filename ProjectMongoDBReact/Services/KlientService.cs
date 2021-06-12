@@ -24,7 +24,7 @@ namespace ProjectMongoDBReact.Services
         }
 
         [HttpGet]
-        public IEnumerable<Klient> Get(string name)
+        public IEnumerable<Klient> Get(string name, string phrase)
         {
             Pracownik pracownik = _pracownik.Find<Pracownik>(f => f.email == name).FirstOrDefault();
 
@@ -40,16 +40,30 @@ namespace ProjectMongoDBReact.Services
             var db = client.GetDatabase("bazaDanych");
             var collection = db.GetCollection<Klient>("klienci").Find(new BsonDocument()).ToList();
 
-            return collection.Select(s => new Klient
-            {
-                Id = s.Id,
-                nazwisko = s.nazwisko,
-                imie = s.imie,
-                nr_tel = s.nr_tel,
-                email = s.email
-            }).ToArray();
 
-            }
+            if (phrase == "brak") { return collection.Select(s => new Klient
+            {
+                    Id = s.Id,
+                    nazwisko = s.nazwisko,
+                    imie = s.imie,
+                    nr_tel = s.nr_tel,
+                    email = s.email
+                }).ToArray();
+            } 
+            else { 
+                return collection.Where(w => w.imie.ToUpper() == phrase.ToUpper() ||
+                w.nazwisko.ToUpper() == phrase.ToUpper() ||
+                w.email.ToUpper() == phrase.ToUpper()
+                ).Select(s => new Klient
+                {
+                    Id = s.Id,
+                    nazwisko = s.nazwisko,
+                    imie = s.imie,
+                    nr_tel = s.nr_tel,
+                    email = s.email
+                }).ToArray();
+                }
+         }
         }
 
         [HttpGet]

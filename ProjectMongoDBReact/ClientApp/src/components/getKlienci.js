@@ -9,16 +9,19 @@ export class getKlienci extends Component {
     static displayName = getKlienci.name;
 
   constructor(props) {
-    super(props);
-      this.state = { name: '', klient: [], loading: true };
+      super(props);
+      this.state = { name: '', phrase: '', klient: [], loading: true };
 
       this.onInputchange = this.onInputchange.bind(this);
       this.handleChecked = this.handleChecked.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
+      this.handleChangePhrase = this.handleChangePhrase.bind(this);
     }
 
 
-  componentDidMount() {
-    this.populateKlienciData();
+    handleSubmit(event) {
+        event.preventDefault();
+        this.populateKlienciData();
     }
 
     onInputchange(event) {
@@ -30,6 +33,13 @@ export class getKlienci extends Component {
     handleChecked = () => {
         this.setState({ show: !this.state.show });
         console.log(this.state.show);
+    }
+
+    handleChangePhrase(event) {
+        this.setState({
+            phrase: event.target.value
+        });
+        console.log(this.state.endDate);
     }
   
 
@@ -43,6 +53,7 @@ export class getKlienci extends Component {
                       <th>Imie</th>
                       <th>Nr. telefonu</th>
                       <th>E-mail</th>
+                      <th>Wiecej</th>
                   </tr>
               </thead>
               <tbody>
@@ -56,6 +67,8 @@ export class getKlienci extends Component {
                           <td>{klient.nr_tel}</td>
 
                           <td>{klient.email}</td>
+
+                          <td><a href={'/userData/' + klient.email }>Rezerwacje uzytkownika</a></td>
                           
               </tr>
                   )} 
@@ -68,12 +81,24 @@ export class getKlienci extends Component {
 
   render() {
     let contents = this.state.loading
-        ? <p><em>Ladowanie tresci...</em></p>
+        ? <p><em>Oczekiwanie na fraze ...</em></p>
         : getKlienci.renderKlienciTable(this.state.klient);
 
     return (
       <div>
             <h1 id="tabelLabel" >Lista klientow</h1>
+            <br />
+
+            <Form onSubmit={this.handleSubmit}>
+                <Form.Label>
+                    Wpisz fraze:
+                    </Form.Label><br />
+                <Form.Control type="text" id="phrase" value={this.state.phrase} onChange={this.handleChangePhrase} />
+                <br />
+                <Button variant="primary" type="submit">
+                    Szukaj
+                     </Button>
+            </Form>
             <br />
             <br />
         {contents}
@@ -90,7 +115,13 @@ export class getKlienci extends Component {
           name: user.name
       });
 
-      const response = await fetch('user/GetKlient/' + this.state.name, {
+      if (this.state.phrase == '') {
+          this.setState({
+              phrase: 'brak'
+          });
+      }
+
+      const response = await fetch('user/GetKlient/' + this.state.name + '/' + this.state.phrase, {
       headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
     });
     const data = await response.json();

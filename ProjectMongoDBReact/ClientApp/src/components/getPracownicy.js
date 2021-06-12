@@ -10,14 +10,18 @@ export class getPracownicy extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { name: '', pracownik: [], loading: true };
+        this.state = { name: '', pracownik: [], loading: true, phrase: '' };
 
         this.onInputchange = this.onInputchange.bind(this);
         this.handleChecked = this.handleChecked.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChangePhrase = this.handleChangePhrase.bind(this);
     }
 
 
-    componentDidMount() {
+
+    handleSubmit(event) {
+        event.preventDefault();
         this.populateKlienciData();
     }
 
@@ -32,6 +36,13 @@ export class getPracownicy extends Component {
         console.log(this.state.show);
     }
 
+    handleChangePhrase(event) {
+        this.setState({
+            phrase: event.target.value
+        });
+        console.log(this.state.endDate);
+    }
+
 
     static renderKlienciTable(pracownicyList) {
         return (
@@ -43,6 +54,7 @@ export class getPracownicy extends Component {
                         <th>Imie</th>
                         <th>Nr. telefonu</th>
                         <th>E-mail</th>
+                        <th>Wiecej</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,6 +69,7 @@ export class getPracownicy extends Component {
 
                             <td>{pracownik.email}</td>
 
+                            <td><a href={'/userData/' + pracownik.email}>Rezerwacje pracownika</a></td>
                         </tr>
                     )}
                 </tbody>
@@ -68,13 +81,25 @@ export class getPracownicy extends Component {
 
     render() {
         let contents = this.state.loading
-            ? <p><em>Ladowanie tresci...</em></p>
+            ? <p><em>Oczekiwanie na fraze ...</em></p>
             : getPracownicy.renderKlienciTable(this.state.pracownik);
 
         return (
             <div>
                 <h1 id="tabelLabel" >Lista pracownikow</h1>
                 <br />
+
+                <Form onSubmit={this.handleSubmit}>
+                    <Form.Label>
+                        Wpisz fraze:
+                    </Form.Label><br />
+                    <Form.Control type="text" id="phrase" value={this.state.phrase} onChange={this.handleChangePhrase} />
+                    <br />
+                    <Button variant="primary" type="submit">
+                        Szukaj
+                     </Button>
+                </Form>
+
                 <br />
                 {contents}
             </div>
@@ -90,7 +115,13 @@ export class getPracownicy extends Component {
             name: user.name
         });
 
-        const response = await fetch('user/GetPracownik/' + this.state.name, {
+        if (this.state.phrase == '') {
+            this.setState({
+                phrase: 'brak'
+            });
+        }
+
+        const response = await fetch('user/GetPracownik/' + this.state.name + '/' + this.state.phrase, {
             headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
         });
         const data = await response.json();

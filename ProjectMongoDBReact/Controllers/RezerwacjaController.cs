@@ -50,6 +50,20 @@ namespace ProjectMongoDBReact.Controllers
             return p;
         }
 
+        [HttpGet(Name = "GetRezerwacjeDetails")]
+        [Route("GetRezerwacjeDetails/{name}/{email}")]
+        public IEnumerable<Rezerwacja> Get(string name, string email)
+        {
+            var p = _rezerwacjaService.GetRezerwacjeDetails(name,email);
+
+            if (p == null)
+            {
+                return null;
+            }
+
+            return p;
+        }
+
         [HttpPost]
         public ActionResult<Rezerwacja> Create(Rezerwacja r)
         {

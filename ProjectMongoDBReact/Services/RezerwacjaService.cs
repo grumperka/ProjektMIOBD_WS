@@ -93,6 +93,38 @@ namespace ProjectMongoDBReact.Services
             }).ToArray();
         }
 
+        public IEnumerable<Rezerwacja> GetRezerwacjeDetails(string name, string email)
+        {
+            var pr = _pracownik.Find<Pracownik>(f => f.email == name).FirstOrDefault();
+
+            if (pr != null)
+            {
+                var connectionString = "mongodb://localhost";
+                var client = new MongoClient(connectionString);
+
+                var db = client.GetDatabase("bazaDanych");
+                var collection = db.GetCollection<Rezerwacja>("rezerwacje").Find(new BsonDocument()).ToList();
+
+                Klient klient = KlientCheck(email);
+
+                return collection.Where(w => w.id_klienta == klient.Id).Select(s => new Rezerwacja
+                {
+                    Id = s.Id,
+                    id_pokoju = s.id_pokoju,
+                    id_klienta = s.id_klienta,
+                    id_rezerwujacego = s.id_rezerwujacego,
+                    poczatek = s.poczatek,
+                    koniec = s.koniec,
+                    koszt = s.koszt,
+                    czyEdytowana = s.czyEdytowana,
+                    dataEdycji = s.dataEdycji,
+                    czyAnulowana = s.czyAnulowana,
+                    czyOplacona = s.czyOplacona
+                }).ToArray();
+            }
+            return null;
+        }
+
 
         public Rezerwacja Create(Rezerwacja r)
         {
