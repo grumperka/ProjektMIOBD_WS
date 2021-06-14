@@ -18,7 +18,7 @@ export class userData extends Component {
 
 
   componentDidMount() {
-      this.populatePokojData();
+      this.populateUserData();
       console.log(this.state.email);
     }
 
@@ -100,7 +100,7 @@ export class userData extends Component {
     );
   }
 
-  async populatePokojData() {
+  async populateUserData() {
       const token = await authService.getAccessToken();
 
       const [isAuthenticated, user] = await Promise.all([authService.isAuthenticated(), authService.getUser()]);
@@ -118,7 +118,7 @@ export class userData extends Component {
 
 }
 
-////////////////////////////////////COS nie dziala
+////////////////////////////////////
 const cancelRezerv = (event) => {
     let e = cancelData(event.target.value);
     console.log(event.target.value);

@@ -17,7 +17,7 @@ export class getAllRachunki extends Component {
 
 
   componentDidMount() {
-    this.populatePokojData();
+    this.populateRachunekData();
     }
 
     onInputchange(event) {
@@ -82,7 +82,7 @@ export class getAllRachunki extends Component {
     );
   }
 
-  async populatePokojData() {
+  async populateRachunekData() {
       const token = await authService.getAccessToken();
 
       const [isAuthenticated, user] = await Promise.all([authService.isAuthenticated(), authService.getUser()]);

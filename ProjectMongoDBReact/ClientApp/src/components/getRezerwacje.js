@@ -117,7 +117,7 @@ export class getRezerwacje extends Component {
 
 }
 
-////////////////////////////////////COS nie dziala
+////////////////////////////////////
 const cancelRezerv = (event) => {
     let e = cancelData(event.target.value);
     console.log(event.target.value);
@@ -142,7 +142,7 @@ async function cancelData(idRezerv) {
     return 0;
 }
 
-//////////////////////////////////////cos nie dziala
+//////////////////////////////////////
 const editRezerv = (event) => {
     let e = editData(event.target.value);
     console.log(event.target.value);
@@ -169,7 +169,7 @@ async function editData(idRezerv) {
     return 0;
 }
 
-////////////////////////////////////// ZROBIC TO!!
+//////////////////////////////////////
 const makeBill = (event) => {
     let e = makeData(event.target.value);
     console.log(event.target.value);
