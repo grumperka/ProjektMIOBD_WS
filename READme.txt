@@ -14,4 +14,12 @@ Aby uruchomić projekt należy wykonać następujące kroki:
 4. By przetestować aplikację, należy się zarejestrować za pomocą dowolnego adresu e-mail i hasła.
 Stworzone konto będzie kontem klienta hotelu.
 
+5. By zalogować się jako pracownik, należy zarejestrować się mailem z bazy danych, z kolekcji "pracownicy", np:
+
+e-mail: 
+kowalski.jan@gmail.com
+
+hasło: 
+kowalski.Jan1
+
 	
